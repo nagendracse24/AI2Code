@@ -36,6 +36,21 @@ const normalizeNode = (node: FigmaNode | undefined) => {
   };
 };
 
+const buildDemoNode = () => ({
+  id: 'demo-node',
+  name: 'Hero Frame',
+  type: 'FRAME',
+  boundingBox: {
+    x: 0,
+    y: 0,
+    width: 1200,
+    height: 640,
+  },
+  text:
+    'AI2Code\nDesign to Code in seconds\nPaste a Figma URL and let AI generate production-ready React components.',
+  childCount: 3,
+});
+
 // Generation endpoint
 app.post('/api/generate', async (req: Request, res: Response) => {
   const { figmaUrl, fileKey, nodeId } = req.body;
@@ -71,8 +86,8 @@ app.post('/api/generate', async (req: Request, res: Response) => {
       generatedAt: new Date().toISOString(),
     },
     design: {
-      nodeId: normalizedNode?.id || nodeId || null,
-      normalizedNode,
+      nodeId: normalizedNode?.id || nodeId || 'demo-node',
+      normalizedNode: normalizedNode || buildDemoNode(),
     },
     componentCode: `import React from 'react';
 
