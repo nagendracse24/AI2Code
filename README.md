@@ -1,117 +1,186 @@
-<<<<<<< HEAD
-# AI2Code - Figma to Code Generator
+# 🧩 AI2Code — AI-Powered Figma → React/Tailwind Generator
 
-Convert Figma designs into production-ready React components using AI.
+> **Design-to-code, reimagined for AI-native teams**
 
-## Project Structure
+AI2Code converts Figma designs into production-ready **React + TypeScript + TailwindCSS** components. It parses Figma JSON, normalizes layout structure, and uses LLMs to generate clean, accessible UI code.
+
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://your-vercel-url.vercel.app)
+[![GitHub](https://img.shields.io/badge/github-AI2Code-blue)](https://github.com/nagendracse24/AI2Code)
+
+---
+
+## ✨ Features
+
+- **Figma-native parsing** — Pull real nodes, constraints, and typography straight from your file
+- **LLM-ready schema** — Normalize design JSON into a compact prompt format engineered for codegen
+- **Production output** — Generate React + Tailwind blocks with copy + download in one click
+- **Live preview** — See generated components rendered in real-time
+- **Observable pipeline** — Full transparency into inputs, normalization, LLM prompts, and output
+- **Demo & live modes** — Works without credentials; plug in tokens for real Figma + OpenAI integration
+
+---
+
+## 🏗️ Project Structure
 
 ```
 AI2code/
-├── backend/          # Node.js + Express + TypeScript API
-│   └── src/
-│       └── index.ts  # Express server entry point
-└── frontend/         # React + Vite + TypeScript UI
-    └── src/
-        ├── App.tsx   # Main React component
-        └── main.tsx  # React entry point
+├── backend/              # Node.js + Express + TypeScript API
+│   ├── src/
+│   │   ├── index.ts      # Express server entry point
+│   │   └── services/
+│   │       ├── figmaClient.ts    # Figma API integration
+│   │       └── llmGenerator.ts   # OpenAI LLM integration
+│   ├── package.json
+│   └── tsconfig.json
+├── frontend/             # React + Vite + TypeScript UI
+│   ├── src/
+│   │   ├── App.tsx       # Main application component
+│   │   ├── main.tsx      # React entry point
+│   │   └── index.css     # TailwindCSS imports
+│   ├── package.json
+│   └── vite.config.ts
+├── vercel.json           # Vercel deployment config
+├── DEPLOYMENT.md         # Detailed deployment guide
+└── README.md             # This file
 ```
 
-## Setup Instructions
+---
 
-### Backend Setup
+## 🚀 Quick Start
 
-1. Navigate to the backend directory:
+### Prerequisites
+
+- Node.js 18+ and npm
+- (Optional) Figma Personal Access Token for live mode
+- (Optional) OpenAI API key for LLM-powered generation
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/nagendracse24/AI2Code.git
+   cd AI2Code
+   ```
+
+2. **Backend setup**
    ```bash
    cd backend
-   ```
-
-2. Install dependencies:
-   ```bash
    npm install
-   ```
-
-3. Create a `.env` file (you can copy from `backend/env.example`):
-   ```
-   PORT=3001
-   FIGMA_PERSONAL_ACCESS_TOKEN=your-figma-token
-   FIGMA_TEAM_ID=optional-team-id
-   OPENAI_API_KEY=your-openai-key
-   ```
-
-4. Start the development server:
-   ```bash
+   cp env.example .env
+   # Edit .env and add your keys (optional for demo mode)
    npm run dev
    ```
+   Backend runs on `http://localhost:3001`
 
-   The backend will run on `http://localhost:3001`
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
+3. **Frontend setup** (in a new terminal)
    ```bash
    cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
    npm install
-   ```
-
-3. Start the development server:
-   ```bash
    npm run dev
    ```
+   Frontend runs on `http://localhost:3000`
 
-   The frontend will run on `http://localhost:3000`
-
-## Development Workflow
-
-- **Backend**: Runs on port 3001, handles API requests
-- **Frontend**: Runs on port 3000, proxies `/api/*` requests to backend
-
-## Next Steps
-
-Phase 1 is complete! Next we'll build:
-- Phase 2: Basic input form with stubbed API response
-- Phase 3: Real Figma API integration
-- Phase 4: LLM-powered code generation
-- Phase 5: Logging and evaluation
-
-## Tech Stack
-
-- **Backend**: Node.js, Express, TypeScript
-- **Frontend**: React, Vite, TypeScript, TailwindCSS
-- **Package Manager**: npm
-
-=======
-# AI2Code
-AI2Code is an AI-assisted developer tool that converts Figma designs into clean, reusable **React + TailwindCSS** components.   It parses Figma JSON, extracts layout structure, infers UI semantics, and refines component output using LLMs.
-# 🧩 AI2Code — AI-Powered Figma → React/Tailwind Generator
-
-AI2Code is an AI-assisted developer tool that converts Figma designs into clean, reusable **React + TailwindCSS** components.  
-It parses Figma JSON, extracts layout structure, infers UI semantics, and refines component output using LLMs.
-
-> 🚧 **Status:** Version 1 under development — expected release: _next 7 days_
+4. **Visit** `http://localhost:3000` and submit a Figma URL or use demo mode
 
 ---
 
-## 🚀 Features (v1)
-- Convert Figma frames → React components
-- Auto-detect layout (Flex/Grid) from Figma autolayout data
-- Extract colors, spacing, typography as design tokens
-- LLM-powered refinement for naming + accessibility hints
-- Downloadable project scaffold (Vite/Next.js)
+## 🌐 Deployment
+
+Deploy to production using Vercel (frontend) + Render (backend).
+
+**👉 See [DEPLOYMENT.md](./DEPLOYMENT.md) for the complete step-by-step guide.**
+
+Quick overview:
+1. Deploy backend to Render (free tier)
+2. Deploy frontend to Vercel (auto-deploy on push)
+3. Set environment variables on each platform
+4. Update CORS and API proxy URLs
 
 ---
 
-## 🛠️ Tech Stack
-- **Frontend:** React, TypeScript, TailwindCSS  
-- **Backend:** Node.js, Python, FastAPI  
-- **AI:** OpenAI GPT-4/5, Prompt Engineering  
-- **Utilities:** Prettier, ESLint  
-- **Deployment:** Docker, Vercel/Render
+## 🔧 Tech Stack
+
+### Backend
+- **Runtime**: Node.js + TypeScript
+- **Framework**: Express.js
+- **APIs**: Figma REST API, OpenAI Chat Completions
+- **Tools**: dotenv, cors, node-fetch
+
+### Frontend
+- **Framework**: React 18 + TypeScript
+- **Build tool**: Vite
+- **Styling**: TailwindCSS
+- **Code preview**: react-live
+- **Deployment**: Vercel
 
 ---
 
-## 🧱 Architecture (High-Level)
->>>>>>> dd727a2251fba9b719359b826e1eb84a2c96dc2e
+## 📋 Environment Variables
+
+### Backend (`backend/.env`)
+
+```bash
+PORT=3001
+FRONTEND_URL=              # Your Vercel URL (for CORS in production)
+FIGMA_PERSONAL_ACCESS_TOKEN=   # Optional: for live Figma mode
+OPENAI_API_KEY=            # Optional: for LLM-powered generation
+```
+
+### Frontend
+
+No environment variables required (proxies to backend via Vite/Vercel config).
+
+---
+
+## 🎯 Usage
+
+1. **Demo mode** (no credentials needed)
+   - Submit any Figma URL or leave fields empty
+   - System returns a baseline component + mock AI draft
+
+2. **Live Figma mode**
+   - Add `FIGMA_PERSONAL_ACCESS_TOKEN` to backend `.env`
+   - Enter a valid `fileKey` + `nodeId` from your Figma file
+   - Backend fetches real node data and normalizes it
+
+3. **AI-powered mode**
+   - Add `OPENAI_API_KEY` to backend `.env`
+   - System sends normalized schema to OpenAI
+   - Returns LLM-generated React component
+
+4. **Live preview**
+   - Click the "Live preview" tab to see the component rendered in real-time
+
+---
+
+## 🤝 Contributing
+
+This is a portfolio project, but suggestions and feedback are welcome! Open an issue or PR if you have ideas for improvements.
+
+---
+
+## 📄 License
+
+MIT License - see [LICENSE](./LICENSE) for details
+
+---
+
+## 👤 Author
+
+**Nagendra Singh**  
+Software Engineer | AI + Full-Stack Developer
+
+- GitHub: [@nagendracse24](https://github.com/nagendracse24)
+- Email: nagendracse24@gmail.com
+
+---
+
+## 🙏 Acknowledgments
+
+- Figma API for design data access
+- OpenAI for LLM-powered code generation
+- React, Vite, TailwindCSS communities
+
+---
+
+Built with ❤️ by Nagendra Singh

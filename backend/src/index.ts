@@ -11,7 +11,23 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors()); // Allow frontend to call this API
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.FRONTEND_URL || '',
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json()); // Parse JSON request bodies
 
 // Health check endpoint
