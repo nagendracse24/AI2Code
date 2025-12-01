@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fetchFigmaNode, FigmaNode } from './services/figmaClient';
 
 // Load environment variables
 dotenv.config();
@@ -17,21 +18,63 @@ app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'AI2Code backend is running' });
 });
 
-// Demo generation endpoint for Phase 2
-app.post('/api/generate', (req: Request, res: Response) => {
+const normalizeNode = (node: FigmaNode | undefined) => {
+  if (!node) {
+    return null;
+  }
+
+  const text =
+    node.type === 'TEXT' && node.characters ? node.characters : undefined;
+
+  return {
+    id: node.id,
+    name: node.name,
+    type: node.type,
+    boundingBox: node.absoluteBoundingBox,
+    text,
+    childCount: node.children?.length ?? 0,
+  };
+};
+
+// Generation endpoint
+app.post('/api/generate', async (req: Request, res: Response) => {
   const { figmaUrl, fileKey, nodeId } = req.body;
 
   console.log('[generate]', { figmaUrl, fileKey, nodeId });
 
+  const canCallFigma =
+    Boolean(process.env.FIGMA_PERSONAL_ACCESS_TOKEN) &&
+    Boolean(fileKey) &&
+    Boolean(nodeId);
+
+  let normalizedNode: ReturnType<typeof normalizeNode> = null;
+  let mode: 'demo' | 'real' = 'demo';
+
+  if (canCallFigma) {
+    try {
+      const figmaResponse = await fetchFigmaNode(fileKey, nodeId);
+      const nodeEntry = figmaResponse.nodes?.[nodeId];
+      normalizedNode = normalizeNode(nodeEntry?.document as FigmaNode);
+      mode = 'real';
+    } catch (error) {
+      console.error('Figma fetch failed, falling back to demo mode:', error);
+    }
+  }
+
   const responsePayload = {
     status: 'success',
+    mode,
     componentName: 'HeroSection',
     metadata: {
       source: figmaUrl || fileKey || 'unknown',
       nodeId: nodeId || 'root',
       generatedAt: new Date().toISOString(),
     },
-    code: `import React from 'react';
+    design: {
+      nodeId: normalizedNode?.id || nodeId || null,
+      normalizedNode,
+    },
+    componentCode: `import React from 'react';
 
 type HeroSectionProps = {
   title: string;

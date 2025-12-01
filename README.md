@@ -30,9 +30,11 @@ AI2code/
    npm install
    ```
 
-3. Create a `.env` file (copy from `.env.example` if available):
+3. Create a `.env` file (you can copy from `backend/env.example`):
    ```
    PORT=3001
+   FIGMA_PERSONAL_ACCESS_TOKEN=your-figma-token
+   FIGMA_TEAM_ID=optional-team-id
    ```
 
 4. Start the development server:
