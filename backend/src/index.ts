@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { fetchFigmaNode, FigmaNode } from './services/figmaClient';
+import { generateComponentFromNode } from './services/llmGenerator';
 
 // Load environment variables
 dotenv.config();
@@ -76,6 +77,10 @@ app.post('/api/generate', async (req: Request, res: Response) => {
     }
   }
 
+  const llmResult = await generateComponentFromNode(
+    normalizedNode || buildDemoNode(),
+  );
+
   const responsePayload = {
     status: 'success',
     mode,
@@ -115,6 +120,7 @@ export function HeroSection({
     </section>
   );
 }`,
+    llm: llmResult,
   };
 
   res.json(responsePayload);

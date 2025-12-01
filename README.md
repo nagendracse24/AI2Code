@@ -35,6 +35,7 @@ AI2code/
    PORT=3001
    FIGMA_PERSONAL_ACCESS_TOKEN=your-figma-token
    FIGMA_TEAM_ID=optional-team-id
+   OPENAI_API_KEY=your-openai-key
    ```
 
 4. Start the development server:
