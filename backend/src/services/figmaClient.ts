@@ -57,3 +57,27 @@ export async function fetchFigmaNode(fileKey: string, nodeId: string) {
   return data;
 }
 
+export async function fetchFigmaImage(fileKey: string, nodeId: string): Promise<string | null> {
+  try {
+    const token = ensureToken();
+    const url = `${FIGMA_API_BASE}/images/${fileKey}?ids=${encodeURIComponent(nodeId)}&format=png&scale=2`;
+
+    const response = await fetch(url, {
+      headers: {
+        'X-Figma-Token': token,
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Figma Images API error:', response.status);
+      return null;
+    }
+
+    const data = (await response.json()) as { images: Record<string, string> };
+    return data.images?.[nodeId] || null;
+  } catch (error) {
+    console.error('Failed to fetch Figma image:', error);
+    return null;
+  }
+}
+

@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { fetchFigmaNode, FigmaNode } from './services/figmaClient';
+import { fetchFigmaNode, fetchFigmaImage, FigmaNode } from './services/figmaClient';
 import { generateComponentFromNode } from './services/llmGenerator';
 
 // Load environment variables
@@ -91,12 +91,17 @@ app.post('/api/generate', async (req: Request, res: Response) => {
 
   let normalizedNode: ReturnType<typeof normalizeNode> = null;
   let mode: 'demo' | 'real' = 'demo';
+  let screenshotUrl: string | null = null;
 
   if (canCallFigma) {
     try {
-      const figmaResponse = await fetchFigmaNode(fileKey, nodeId);
+      const [figmaResponse, imageUrl] = await Promise.all([
+        fetchFigmaNode(fileKey, nodeId),
+        fetchFigmaImage(fileKey, nodeId),
+      ]);
       const nodeEntry = figmaResponse.nodes?.[nodeId];
       normalizedNode = normalizeNode(nodeEntry?.document as FigmaNode);
+      screenshotUrl = imageUrl;
       mode = 'real';
     } catch (error) {
       console.error('Figma fetch failed, falling back to demo mode:', error);
@@ -119,6 +124,7 @@ app.post('/api/generate', async (req: Request, res: Response) => {
     design: {
       nodeId: normalizedNode?.id || nodeId || 'demo-node',
       normalizedNode: normalizedNode || buildDemoNode(),
+      screenshotUrl: screenshotUrl,
     },
     componentCode: `import React from 'react';
 

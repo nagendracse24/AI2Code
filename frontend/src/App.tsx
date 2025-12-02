@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LiveProvider, LivePreview, LiveError } from 'react-live';
 
 type NormalizedNode = {
@@ -35,6 +35,7 @@ type GenerateResponse = {
   design: {
     nodeId: string | null;
     normalizedNode: NormalizedNode | null;
+    screenshotUrl: string | null;
   };
   componentCode: string;
   llm: LLMResult;
@@ -64,6 +65,29 @@ function App() {
   const [result, setResult] = useState<GenerateResponse | null>(null);
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle');
   const [codeTab, setCodeTab] = useState<'baseline' | 'llm' | 'preview'>('baseline');
+  const [history, setHistory] = useState<GenerateResponse[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('ai2code-history');
+    if (saved) {
+      try {
+        setHistory(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load history:', e);
+      }
+    }
+  }, []);
+
+  // Save to history whenever result changes
+  useEffect(() => {
+    if (result) {
+      const newHistory = [result, ...history.slice(0, 9)]; // Keep last 10
+      setHistory(newHistory);
+      localStorage.setItem('ai2code-history', JSON.stringify(newHistory));
+    }
+  }, [result]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -135,6 +159,17 @@ function App() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem('ai2code-history');
+  };
+
+  const restoreFromHistory = (item: GenerateResponse) => {
+    setResult(item);
+    setFigmaUrl(item.metadata.source);
+    setShowHistory(false);
   };
 
   const generationState = loading ? 'processing' : result ? 'ready' : 'idle';
@@ -223,6 +258,13 @@ function App() {
                 </a>
                 <button
                   type="button"
+                  onClick={() => setShowHistory(!showHistory)}
+                  className="inline-flex items-center gap-2 border border-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:border-white/40 transition"
+                >
+                  {showHistory ? 'Hide' : 'View'} History ({history.length})
+                </button>
+                <button
+                  type="button"
                   className="inline-flex items-center gap-2 border border-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:border-white/40 transition"
                 >
                   Connect Figma workspace
@@ -297,6 +339,37 @@ function App() {
             </div>
           </div>
         </section>
+
+        {showHistory && history.length > 0 && (
+          <section className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-indigo-200">Generation history</p>
+                <h2 className="text-xl font-semibold text-white mt-1">Recent runs ({history.length})</h2>
+              </div>
+              <button
+                onClick={clearHistory}
+                className="text-sm text-red-400 hover:text-red-300 font-medium"
+              >
+                Clear all
+              </button>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {history.map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => restoreFromHistory(item)}
+                  className="text-left bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-4 transition group"
+                >
+                  <p className="text-xs text-indigo-300 mb-1">{item.mode === 'demo' ? '🎨 Demo' : '🔗 Live'}</p>
+                  <p className="text-sm font-semibold text-white mb-1">{item.componentName}</p>
+                  <p className="text-xs text-slate-400 truncate">{item.metadata.source}</p>
+                  <p className="text-xs text-slate-500 mt-2">{new Date(item.metadata.generatedAt).toLocaleString()}</p>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section
           id="generator"
@@ -509,6 +582,24 @@ function App() {
                 <div className="rounded-2xl bg-slate-950/80 border border-white/10 p-4 overflow-auto text-xs text-slate-200 font-mono max-h-64">
                   <pre className="whitespace-pre-wrap">{result.llm.prompt}</pre>
                 </div>
+              </div>
+            )}
+
+            {result?.design?.screenshotUrl && (
+              <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6 space-y-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-indigo-200">
+                  Figma Design Preview
+                </p>
+                <div className="rounded-2xl overflow-hidden bg-white/10 p-4">
+                  <img
+                    src={result.design.screenshotUrl}
+                    alt="Figma design screenshot"
+                    className="w-full h-auto rounded-lg shadow-lg"
+                  />
+                </div>
+                <p className="text-xs text-slate-400">
+                  Original design captured from Figma
+                </p>
               </div>
             )}
 
