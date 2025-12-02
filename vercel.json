@@ -8,7 +8,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://ai2code-backend.onrender.com/api/:path*"
+      "destination": "https://ai2code.onrender.com/api/:path*"
     }
   ]
 }
