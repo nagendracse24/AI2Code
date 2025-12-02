@@ -4,8 +4,22 @@
 
 AI2Code converts Figma designs into production-ready **React + TypeScript + TailwindCSS** components. It parses Figma JSON, normalizes layout structure, and uses LLMs to generate clean, accessible UI code.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://your-vercel-url.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://ai-2-code.vercel.app)
 [![GitHub](https://img.shields.io/badge/github-AI2Code-blue)](https://github.com/nagendracse24/AI2Code)
+[![Backend API](https://img.shields.io/badge/api-live-blue)](https://ai2code.onrender.com/health)
+
+---
+
+## 🌐 Live Deployment
+
+**Frontend**: [https://ai-2-code.vercel.app](https://ai-2-code.vercel.app)  
+**Backend API**: [https://ai2code.onrender.com](https://ai2code.onrender.com)  
+**Health Check**: [https://ai2code.onrender.com/health](https://ai2code.onrender.com/health)
+
+Try the live demo with these sample values:
+- **Figma URL**: `https://www.figma.com/file/1487309170684591074/AI2Code-Demo?type=design&node-id=0-1`
+- **File Key**: `1487309170684591074`
+- **Node ID**: `0:1`
 
 ---
 

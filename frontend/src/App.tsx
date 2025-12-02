@@ -95,6 +95,18 @@ function App() {
   const activeCode =
     codeTab === 'llm' ? result?.llm?.code ?? result?.componentCode : result?.componentCode;
 
+  // Strip TypeScript syntax for react-live preview
+  const stripTypeScript = (code: string) => {
+    return code
+      .replace(/import\s+.*?from\s+['"].*?['"];?\s*/g, '') // Remove imports
+      .replace(/export\s+(default\s+)?/g, '') // Remove exports
+      .replace(/:\s*\w+(\[\])?(\s*\|\s*\w+)*\s*(?=[,);=])/g, '') // Remove type annotations
+      .replace(/type\s+\w+\s*=\s*\{[^}]*\};?/g, '') // Remove type definitions
+      .replace(/interface\s+\w+\s*\{[^}]*\};?/g, ''); // Remove interfaces
+  };
+
+  const previewCode = stripTypeScript(activeCode || '');
+
   const handleCopyCode = async () => {
     if (!activeCode) {
       return;
@@ -467,7 +479,7 @@ function App() {
                   </div>
                 ) : codeTab === 'preview' && activeCode ? (
                   <div className="bg-white rounded-2xl p-8 min-h-[220px]">
-                    <LiveProvider code={activeCode} scope={{ React }}>
+                    <LiveProvider code={previewCode} scope={{ React }}>
                       <LivePreview className="text-slate-900" />
                       <LiveError className="mt-4 text-red-400 text-xs" />
                     </LiveProvider>
