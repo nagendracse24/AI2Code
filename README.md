@@ -4,9 +4,23 @@
 
 AI2Code converts Figma designs into production-ready **React + TypeScript + TailwindCSS** components. It parses Figma JSON, normalizes layout structure, and uses LLMs to generate clean, accessible UI code.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://ai-2-code.vercel.app)
-[![GitHub](https://img.shields.io/badge/github-AI2Code-blue)](https://github.com/nagendracse24/AI2Code)
-[![Backend API](https://img.shields.io/badge/api-live-blue)](https://ai2code.onrender.com/health)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-ai--2--code.vercel.app-brightgreen?style=for-the-badge)](https://ai-2-code.vercel.app)
+[![GitHub Stars](https://img.shields.io/github/stars/nagendracse24/AI2Code?style=for-the-badge&logo=github)](https://github.com/nagendracse24/AI2Code)
+[![Backend API](https://img.shields.io/badge/API-Live-blue?style=for-the-badge&logo=node.js)](https://ai2code.onrender.com/health)
+[![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](./LICENSE)
+
+---
+
+## 🎥 Quick Demo
+
+**Live URL**: [https://ai-2-code.vercel.app](https://ai-2-code.vercel.app)
+
+Try it with these sample values:
+```
+Figma URL: https://www.figma.com/file/1487309170684591074/AI2Code-Demo?type=design&node-id=0-1
+File Key: 1487309170684591074
+Node ID: 0:1
+```
 
 ---
 
@@ -194,6 +208,57 @@ Software Engineer | AI + Full-Stack Developer
 - Figma API for design data access
 - OpenAI for LLM-powered code generation
 - React, Vite, TailwindCSS communities
+
+---
+
+## 📋 How to Add to Your Portfolio
+
+### For Your Resume
+```
+AI2Code - AI-Powered Figma to React Code Generator
+• Built full-stack application converting Figma designs to React+Tailwind components using OpenAI GPT
+• Integrated Figma REST API and OpenAI Chat Completions with TypeScript backend
+• Deployed on Vercel (frontend) and Render (backend) with CI/CD pipeline
+• Tech: React, TypeScript, Node.js, Express, TailwindCSS, OpenAI API, Figma API
+• Live: https://ai-2-code.vercel.app
+```
+
+### For Your Portfolio Website
+See [PORTFOLIO.md](./PORTFOLIO.md) for a complete portfolio entry template with:
+- Project overview and problem statement
+- Technical architecture details
+- Key features and screenshots
+- Skills demonstrated
+- Impact metrics
+
+### For LinkedIn/Social Media
+```
+🚀 Just launched AI2Code - an AI-powered tool that converts Figma designs 
+into production-ready React components!
+
+✨ Features:
+• Real-time Figma API integration
+• OpenAI GPT code generation
+• Live component preview
+• Generation history tracking
+
+Built with React, TypeScript, Node.js, and deployed on Vercel + Render.
+
+Try it live: https://ai-2-code.vercel.app
+GitHub: https://github.com/nagendracse24/AI2Code
+
+#WebDevelopment #AI #React #OpenAI #Figma
+```
+
+---
+
+## ⭐ Show Your Support
+
+If you found this project helpful or interesting:
+- ⭐ Star this repository
+- 🍴 Fork it for your own experiments
+- 📣 Share it with others
+- 🐛 Report issues or suggest features
 
 ---
 
